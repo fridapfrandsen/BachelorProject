@@ -1,0 +1,44 @@
+import fieldmath
+
+class ReedSolomon:
+
+    def __init__(self, field, primitivElement, messageLenght, parityNumber):
+
+        # The field
+        self.f = field
+
+        # Primitive element that generates the field
+        self.generator = primitivElement
+
+        # Length of message to be sent
+        self.messageLen = messageLenght
+
+        # Number of parity bits to be added to the message
+        self.parityLen = parityNumber
+
+        # Length of codeword
+        self.codewordLen = messageLenght + parityNumber
+
+    # Method for creating generator polynomial
+    def makeGeneratorPolynomial(self):
+        result = [self.f.one()] + [self.f.zero()] * (self.parityLen - 1)
+
+        powerOfGenerator = self.f.one()
+		for i in range(self.ecc_len):
+			# At this point, genpow == generator^i.
+			# Multiply the current genpoly by (x - generator^i)
+			for j in reversed(range(self.ecc_len)):
+				result[j] = self.f.multiply(self.f.negate(genpow), result[j])
+				if j >= 1:
+					result[j] = self.f.add(result[j - 1], result[j])
+			genpow = self.f.multiply(self.generator, genpow)
+		return result
+
+    # Encoding methods
+    def encode(self, message):
+
+        # Produce the generator polynomial
+        genPolynomial = self.makeGeneratorPolynomial()
+
+
+
