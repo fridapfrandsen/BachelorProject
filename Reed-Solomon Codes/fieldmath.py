@@ -10,7 +10,7 @@ import fractions, math
 
 
 # ---- Field abstract class ----
-
+ 
 class Field:
 	"""An abstract base class representing a field in abstract algebra. Every field must
 	satisfy all these axioms, where x, y, z are arbitrary elements of the field:
@@ -152,7 +152,6 @@ class PrimeField(Field):
 	
 	def one(self):
 		return 1
-	
 	
 	def equals(self, x, y):
 		return self._check(x) == self._check(y)
