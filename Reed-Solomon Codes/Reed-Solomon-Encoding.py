@@ -1,5 +1,6 @@
 from fieldmath import PrimeField
 from fieldmath import Matrix
+from sympy import symbols, div, GF, poly
 import numpy as np
 
 class ReedSolomonEncoding:
@@ -60,17 +61,23 @@ class ReedSolomonEncoding:
         return (Q0, Q1)
     
     def polydivision(self, receivedWord):
+        self.g = 0
+        self.f = 0
         (Q0,Q1) = self.findPolynomial(receivedWord)
         for i in range(len(Q0)):
             Q0[i] = (-Q0[i]) % self.fieldPrime
-        g, rx = np.polynomial.polynomial.polydiv(tuple(Q0), tuple(Q1))
-        if (rx != [0.]):
-            raise SyntaxError("Division gik galt")
+        x = symbols('x')
+        for i in range(len(Q0)):
+            self.g += Q0[i]*x**(len(Q0)-i-1)
+        for i in range(len(Q1)):
+            self.f += Q1[i]*x**(len(Q1)-i-1)
+        print(self.f , self.g)
+        q, r = div(self.g, self.f, domain=GF(self.fieldPrime))
+        g = poly(q,x).coeffs()
         for i in range(len(g)):
             g[i] = g[i] % self.fieldPrime
         return g
 
-    
 
 
 ReedSolomon = ReedSolomonEncoding(3, 7, 3)
@@ -82,8 +89,6 @@ thisMatrix = ReedSolomon.generateMatrix([0,3,3,1,0,1])
 print("Encoded message:", "\n", thisMatrix)
 rowsWithValues = ReedSolomon.findPolynomial([0,3,3,1,0,1])
 print("Polynomials", "\n", rowsWithValues)
-polydiv = ReedSolomon.polydivision([0,3,3,1,0,1])
+polydiv = ReedSolomon.polydivision([0,3,3,6,0,1])
 print("Polynomials dividet", "\n", polydiv)
-
-
 
