@@ -71,7 +71,6 @@ class ReedSolomonEncoding:
             self.g += Q0[i]*x**(len(Q0)-i-1)
         for i in range(len(Q1)):
             self.f += Q1[i]*x**(len(Q1)-i-1)
-        print(self.f , self.g)
         q, r = div(self.g, self.f, domain=GF(self.fieldPrime))
         g = poly(q,x).coeffs()
         for i in range(len(g)):
@@ -81,14 +80,14 @@ class ReedSolomonEncoding:
 
 
 ReedSolomon = ReedSolomonEncoding(3, 7, 3)
-print("elements:", ReedSolomon.elements())
+# print("elements:", ReedSolomon.elements())
 message = [1, 4, 2]
 encoded_message = ReedSolomon.encodeMessage(message)
 print("Encoded message:", encoded_message)
-thisMatrix = ReedSolomon.generateMatrix([0,3,3,1,0,1])
-print("Encoded message:", "\n", thisMatrix)
-rowsWithValues = ReedSolomon.findPolynomial([0,3,3,1,0,1])
-print("Polynomials", "\n", rowsWithValues)
-polydiv = ReedSolomon.polydivision([0,3,3,6,0,1])
+# thisMatrix = ReedSolomon.generateMatrix([0,3,3,1,0,1])
+# print("Encoded message:", "\n", thisMatrix)
+# rowsWithValues = ReedSolomon.findPolynomial([0,3,3,1,0,1])
+# print("Polynomials", "\n", rowsWithValues)
+polydiv = ReedSolomon.polydivision([0,3,3,1,0,1])
 print("Polynomials dividet", "\n", polydiv)
 
