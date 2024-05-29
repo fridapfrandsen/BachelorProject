@@ -72,31 +72,31 @@ class ReedSolomonEncoding:
         for i in range(len(Q1)):
             self.f += Q1[i]*x**(len(Q1)-i-1)
         q, r = div(self.g, self.f, domain=GF(self.fieldPrime))
-        g = poly(q,x).coeffs()
+        g = poly(q,x).all_coeffs()
         for i in range(len(g)):
             g[i] = g[i] % self.fieldPrime
-        return g
+        return g[::-1]
 
 
 
-# ReedSolomon = ReedSolomonEncoding(3, 7, 3)
-# print("elements:", ReedSolomon.elements())
-# message = [1, 4, 2]
-# encoded_message = ReedSolomon.encodeMessage(message)
-# print("Encoded message:", encoded_message)
-# thisMatrix = ReedSolomon.generateMatrix([0,3,3,1,0,1])
-# print("Encoded message:", "\n", thisMatrix)
-# rowsWithValues = ReedSolomon.findPolynomial([0,3,3,1,0,1])
-# print("Polynomials", "\n", rowsWithValues)
-# polydiv = ReedSolomon.polydivision([0,3,3,1,0,1])
-# print("Polynomials dividet", "\n", polydiv)
+ReedSolomon = ReedSolomonEncoding(3, 7, 3)
+print("elements:", ReedSolomon.elements())
+message = [1, 4, 2]
+encoded_message = ReedSolomon.encodeMessage(message)
+print("Encoded message:", encoded_message)
+thisMatrix = ReedSolomon.generateMatrix([0,3,3,1,0,1])
+print("Encoded message:", "\n", thisMatrix)
+rowsWithValues = ReedSolomon.findPolynomial([0,3,3,1,0,1])
+print("Polynomials", "\n", rowsWithValues)
+polydiv = ReedSolomon.polydivision([0,3,3,1,0,1])
+print("Polynomials dividet", "\n", polydiv)
 
 RS = ReedSolomonEncoding(5, 11, 2)
 print("Elementer: ", RS.elements())
-message = [3, 4, 7, 2, 1]
+message = [3, 4, 7, 0, 1]
 encoded = RS.encodeMessage(message)
 print("Encoded: ", encoded)
-received = [6, 5, 9, 4, 1, 5, 1, 7, 4, 5]
+received = [4, 0, 2, 3, 1, 7, 6, 3, 5, 2]
 print("Received word ", received)
 # print(RS.generateMatrix(received))
 Q = RS.findPolynomial(received)
