@@ -3,7 +3,7 @@ from fieldmath import Matrix
 from sympy import symbols, div, GF, poly
 import numpy as np
 
-class ReedSolomonEncoding:
+class ReedSolomonFP:
     def __init__(self, k, fieldPrime, primitivElement):
         self.n = fieldPrime - 1
         self.k = k
@@ -79,7 +79,7 @@ class ReedSolomonEncoding:
 
 
 
-ReedSolomon = ReedSolomonEncoding(3, 7, 3)
+ReedSolomon = ReedSolomonFP(3, 7, 3)
 print("elements:", ReedSolomon.elements())
 message = [1, 4, 2]
 encoded_message = ReedSolomon.encodeMessage(message)
@@ -91,7 +91,7 @@ print("Polynomials", "\n", rowsWithValues)
 polydiv = ReedSolomon.polydivision([0,3,3,1,0,1])
 print("Polynomials dividet", "\n", polydiv)
 
-RS = ReedSolomonEncoding(5, 11, 2)
+RS = ReedSolomonFP(5, 11, 2)
 print("Elementer: ", RS.elements())
 message = [3, 4, 7, 0, 1]
 encoded = RS.encodeMessage(message)
