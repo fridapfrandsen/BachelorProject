@@ -2,7 +2,7 @@ from fieldmath import PrimeField
 from fieldmath import Matrix
 import numpy as np
 
-class HammingEncoding:
+class HammingCode:
     def __init__(self, parity_check_matrix):
         self.H = np.array(parity_check_matrix)
         self.genMatrix = None
@@ -16,11 +16,6 @@ class HammingEncoding:
                 self.ParityMatrix.set(i, j, int(self.H[i, j]))
 
     def generateMatrix(self):
-        # rows, cols = self.H.shape
-        # matrix = Matrix(rows, cols, self.field)
-        # for i in range(rows):
-        #     for j in range(cols):
-        #         matrix.set(i, j, int(self.H[i, j]))
         self.genMatrix = Matrix(self.cols - self.rows, self.cols, self.field)
         for i in range(self.cols - self.rows):
             for j in range(self.rows):
@@ -63,7 +58,7 @@ class HammingEncoding:
         return self.decodeMessage
 
 
-x = HammingEncoding([[1, 1, 1, 0, 1, 0, 0],[1, 1, 0, 1, 0, 1, 0],[1, 0, 1, 1, 0, 0, 1]])
+x = HammingCode([[1, 1, 1, 0, 1, 0, 0],[1, 1, 0, 1, 0, 1, 0],[1, 0, 1, 1, 0, 0, 1]])
 
 print("Paritychek:", "\n" , x.ParityMatrix)
 x.generateMatrix()
