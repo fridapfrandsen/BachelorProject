@@ -75,7 +75,7 @@ class ReedSolomonPrimeField:
                 Q0[len(Q0)-j-1] -= error_correction_matrix.get(j, error_correction_matrix.column_count() - ( i + 1))
         for i in range(rows_with_values):
             for j in range(len(Q0), error_correction_matrix.row_count() ):
-                Q1[j-(len(Q0)+1)] -= error_correction_matrix.get(j, error_correction_matrix.column_count() - ( i + 1))
+                Q1[(len(Q0)-1)-j] -= error_correction_matrix.get(j, error_correction_matrix.column_count() - ( i + 1))
         for i in range(rows_with_values):
             Q1[i] = 1
         for i in range(len(Q0)):
@@ -96,6 +96,8 @@ class ReedSolomonPrimeField:
         for i in range(len(Q1)):
             self.f += Q1[i]*x**(len(Q1)-i-1)
         q, r = div(self.g, self.f, domain=GF(self.field_size))
+        if r != 0:
+            raise ValueError("Polynomial division did not result in a zero remainder")
         g = poly(q,x).all_coeffs()
         for i in range(len(g)):
             g[i] = g[i] % self.field_size
