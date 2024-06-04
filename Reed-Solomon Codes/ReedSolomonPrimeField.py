@@ -101,7 +101,10 @@ class ReedSolomonPrimeField:
         g = poly(q,x).all_coeffs()
         for i in range(len(g)):
             g[i] = g[i] % self.field_size
-        return g[::-1]
+        g = g[::-1]
+        while len(g) < self.k:
+            g.append(0)
+        return g
     
     def DecodeMessage(self, received_word):
         print(f"Received codeword is {received_word}")
