@@ -1,5 +1,3 @@
-# from fieldmath import PrimeField
-# from fieldmath import Matrix
 from fieldmath import *
 from sympy import symbols, div, GF, poly
 import numpy as np
