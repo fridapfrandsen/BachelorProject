@@ -5,18 +5,18 @@ import random as rand
 
 class ReedSolomonPrimeField:
     def __init__(self, code_length, message_length, primitive_element):
-        self.n = code_length
+        self.n = code_length # Length of codeword
         self.field_size = code_length + 1  # Field size
         self.k = message_length  # Length of message
         self.primitive_element = primitive_element  # Primitive element in the field
-        self.field = PrimeField(self.field_size) 
-        self.l_null = self.n - 1 - int((self.n - self.k)/2)
+        self.field = PrimeField(self.field_size) # Generates the PrimeField using fieldmath
+        self.l_null = self.n - 1 - int((self.n - self.k)/2) 
         self.l_one = self.l_null - (self.k - 1)
         self.d = self.n - self.k + 1  # Minimum distance is the singleton bound
 
 
     def GenerateElements(self):
-        # Generate elements of the finite field eksept 0
+        # Generate elements of the finite field exept 0
         elements = [0] * (self.field_size -1)
         for i in range(self.field_size -1):
             elements[i] = self.primitive_element**i % self.field_size
@@ -30,7 +30,8 @@ class ReedSolomonPrimeField:
         encoded_message = [0] * len(elements)
         for i in range(len(elements)):
             for j in range(len(message)):
-                encoded_message[i] = (encoded_message[i] + message[j]*(elements[i]**j)) % self.field_size
+                encoded_message[i] = (encoded_message[i] + message[j] * 
+                                      (elements[i] ** j)) % self.field_size
         print(f"Encoded codeword is {encoded_message}")
         return encoded_message
     
@@ -42,7 +43,8 @@ class ReedSolomonPrimeField:
         t = 1
         while t < self.d / 2:
             error_position = rand.randint(0, len(codeword) - 1)
-            error_codeword[error_position] = ((error_codeword[error_position]) + rand.randint(0, self.field_size)) % self.field_size
+            error_codeword[error_position] = ((error_codeword[error_position]) + 
+                                            rand.randint(0, self.field_size)) % self.field_size
             error_list.append(error_position + 1)
             t += 1
         print(f"Possible error at: {error_list}")
@@ -51,7 +53,7 @@ class ReedSolomonPrimeField:
 
     # Decoding process
     def GenerateErrorCorrectionMatrix(self, received_word):
-        # Generate the matrix from the algorithem
+        # Generate the matrix from the algorithm
         elements = self.GenerateElements()
         error_correction_matrix = Matrix(self.n, self.l_null + self.l_one + 2, self.field)
         for i in range(self.l_null + 1):
@@ -59,7 +61,8 @@ class ReedSolomonPrimeField:
                 error_correction_matrix.set(j, i, (elements[j]**i) % self.field_size)
         for i in range(self.l_one + 1):
             for j in range(len(elements)):
-                error_correction_matrix.set(j, i + self.l_null + 1, ((elements[j]**i)*received_word[j]) % self.field_size)
+                error_correction_matrix.set(j, i + self.l_null + 1, 
+                                    ((elements[j]**i) * received_word[j]) % self.field_size)
         error_correction_matrix.reduced_row_echelon_form()
         return error_correction_matrix
     
@@ -71,10 +74,12 @@ class ReedSolomonPrimeField:
         rows_with_values = error_correction_matrix.column_count() - error_correction_matrix.row_count()
         for i in range(rows_with_values):
             for j in range(len(Q0)):
-                Q0[len(Q0)-j-1] -= error_correction_matrix.get(j, error_correction_matrix.column_count() - ( i + 1))
+                Q0[len(Q0)-j-1] -= error_correction_matrix.get(j, 
+                                    error_correction_matrix.column_count() - ( i + 1))
         for i in range(rows_with_values):
             for j in range(len(Q0), error_correction_matrix.row_count() ):
-                Q1[(len(Q0)-1)-j] -= error_correction_matrix.get(j, error_correction_matrix.column_count() - ( i + 1))
+                Q1[(len(Q0)-1)-j] -= error_correction_matrix.get(j, 
+                                    error_correction_matrix.column_count() - ( i + 1))
         for i in range(rows_with_values):
             Q1[i] = 1
         for i in range(len(Q0)):
@@ -84,7 +89,7 @@ class ReedSolomonPrimeField:
         return (Q0, Q1)
     
     def PolynomialDivision(self, received_word):
-        # Perform polynomial division on Q1 and Q0 to finde g(x)
+        # Perform polynomial division on Q1 and Q0 to find g(x)
         self.g = 0
         self.f = 0
         (Q0,Q1) = self.FindErrorPolynomial(received_word)
@@ -111,7 +116,3 @@ class ReedSolomonPrimeField:
         decoded_message = self.PolynomialDivision(received_word)
         print(f"Decoded message is {decoded_message}")
         return decoded_message
-    
-
-
-
