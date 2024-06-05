@@ -6,10 +6,9 @@ import random as rand
 class ReedSolomonPrimeField:
     def __init__(self, code_length, message_length, primitive_element):
         self.n = code_length
-        self.field_size = code_length + 1  # Length of codeword
+        self.field_size = code_length + 1  # Field size
         self.k = message_length  # Length of message
         self.primitive_element = primitive_element  # Primitive element in the field
-        self.field_size = code_length +1
         self.field = PrimeField(self.field_size) 
         self.l_null = self.n - 1 - int((self.n - self.k)/2)
         self.l_one = self.l_null - (self.k - 1)
@@ -17,6 +16,7 @@ class ReedSolomonPrimeField:
 
 
     def GenerateElements(self):
+        # Generate elements of the finite field eksept 0
         elements = [0] * (self.field_size -1)
         for i in range(self.field_size -1):
             elements[i] = self.primitive_element**i % self.field_size
@@ -24,7 +24,6 @@ class ReedSolomonPrimeField:
 
 
     # Encoding method
-
     def EncodeMessage(self, message):
         print(f"Message to be encoded is {message}")
         elements = self.GenerateElements()
@@ -37,7 +36,6 @@ class ReedSolomonPrimeField:
     
 
     # Generate t errors
-
     def MakeError(self, codeword):
         error_codeword = codeword.copy()
         error_list = []
@@ -52,8 +50,8 @@ class ReedSolomonPrimeField:
 
 
     # Decoding process
-
     def GenerateErrorCorrectionMatrix(self, received_word):
+        # Generate the matrix from the algorithem
         elements = self.GenerateElements()
         error_correction_matrix = Matrix(self.n, self.l_null + self.l_one + 2, self.field)
         for i in range(self.l_null + 1):
@@ -66,6 +64,7 @@ class ReedSolomonPrimeField:
         return error_correction_matrix
     
     def FindErrorPolynomial(self, received_word):
+        # Find error polynomial from the matrix
         error_correction_matrix = self.GenerateErrorCorrectionMatrix(received_word)
         Q0 = [0] * (self.l_null + 1)
         Q1 = [0] * (self.l_one + 1)
@@ -85,6 +84,7 @@ class ReedSolomonPrimeField:
         return (Q0, Q1)
     
     def PolynomialDivision(self, received_word):
+        # Perform polynomial division on Q1 and Q0 to finde g(x)
         self.g = 0
         self.f = 0
         (Q0,Q1) = self.FindErrorPolynomial(received_word)
