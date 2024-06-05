@@ -60,3 +60,4 @@ x = symbols('x')
 # print(ReedSolomon.generateMatrix([Poly(1, x, modulus=2), Poly(x**2 + x, x, modulus=2), Poly(x, x, modulus=2), Poly(0, x, modulus=2), Poly(x**2, x, modulus=2), Poly(0, x, modulus=2), Poly(x+1, x, modulus=2)]))
 
 
+

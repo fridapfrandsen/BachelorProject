@@ -4,12 +4,13 @@ import numpy as np
 import random as rand
 
 class ReedSolomonPrimeField:
-    def __init__(self, field_size, message_length, primitive_element):
-        self.n = field_size - 1  # Length of codeword
+    def __init__(self, code_length, message_length, primitive_element):
+        self.n = code_length
+        self.field_size = code_length + 1  # Length of codeword
         self.k = message_length  # Length of message
         self.primitive_element = primitive_element  # Primitive element in the field
-        self.field_size = field_size
-        self.field = PrimeField(field_size) 
+        self.field_size = code_length +1
+        self.field = PrimeField(self.field_size) 
         self.l_null = self.n - 1 - int((self.n - self.k)/2)
         self.l_one = self.l_null - (self.k - 1)
         self.d = self.n - self.k + 1  # Minimum distance is the singleton bound
@@ -109,5 +110,7 @@ class ReedSolomonPrimeField:
         decoded_message = self.PolynomialDivision(received_word)
         print(f"Decoded message is {decoded_message}")
         return decoded_message
+    
+
 
 
