@@ -12,4 +12,3 @@ encoded_message = RS_11_5.EncodeMessage(message)
 error_codeword = [4, 0, 2, 3, 9, 7, 6, 3, 0, 0]
 error_codeword = RS_11_5.MakeError(encoded_message)
 decoded_message = RS_11_5.DecodeMessage(error_codeword)
-
