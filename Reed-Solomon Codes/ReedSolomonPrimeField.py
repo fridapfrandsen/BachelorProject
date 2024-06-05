@@ -40,13 +40,14 @@ class ReedSolomonPrimeField:
 
     def MakeError(self, codeword):
         error_codeword = codeword.copy()
+        error_list = []
         t = 1
         while t < self.d / 2:
             error_position = rand.randint(0, len(codeword) - 1)
             error_codeword[error_position] = ((error_codeword[error_position]) + rand.randint(0, self.field_size)) % self.field_size
-            print(f"Possible error at: {error_position + 1}")
+            error_list.append(error_position + 1)
             t += 1
-
+        print(f"Possible error at: {error_list}")
         return error_codeword
 
 
